@@ -24,6 +24,7 @@ import _ from "lodash";
 // import {Prompt} from "../../utils/prompt"
 // const message = new Prompt();
 import { login } from "../../API/login";
+
 export default {
   // 组件名称
   name: "demo",
