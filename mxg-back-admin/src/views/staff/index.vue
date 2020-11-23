@@ -10,7 +10,7 @@
         <el-input v-model="search.user" placeholder="姓名"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">查询</el-button>
+        <el-button type="primary" @click="search">查询</el-button>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">新增</el-button>
@@ -35,7 +35,7 @@
       <el-table-column fixed="right" label="操作" width="200">
         <template slot-scope="scope">
           <el-button @click="staffDel(scope.row)" type="text" size="small">编辑</el-button>
-          <el-button type="text" size="small">删除</el-button>
+          <el-button type="text" size="small" @click="shan(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { staffinfo } from "../../API/staff";
+import { staffinfo,staffDel } from "../../API/staff";
 export default {
   // 组件名称
   name: "demo",
@@ -56,6 +56,7 @@ export default {
   data() {
     return {
       staffList: [],
+      copyList:[],
       search: {
         name: "",
         username: "",
@@ -73,17 +74,45 @@ export default {
   watch: {},
   // 组件方法
   methods: {
+    //删除
+    shan(id){
+      // console.log(id);
+      staffDel(id).then(res=>{
+        if(res.data.code===2000){
+          this.$message.success('删除成功')
+          this.staffList.filter(item=>{
+            if(item.id===id){
+              this.staffList.splice(item,1)
+            }
+          })
+        }else{
+          this.$message.success('删除失败')
+        }
+      })
+    },
+      // this.staffList.filter(item=>{
+      //   if(item.id===id){
+      //     this.staffList.splice(item,1)
+      //   }
+      // })
     // 获取渲染数据
     async getstaff() {
       const { data: res } = await staffinfo(this.page, this.pageSize);
-      // console.log(res);
+      console.log(res);
       if (res.flag == true) {
         this.staffList = res.data.rows;
+        this.copyList=res.data.rows;
       }
     },
     // 编辑方法
     staffDel(){
       alert("编辑")
+    },
+    // 搜索功能
+    search(){
+      this.staffList=res.copyList.filter(item=>{
+        return item 
+      })
     },
 
 
@@ -109,7 +138,7 @@ export default {
    * 组件实例创建完成，属性已绑定，但DOM还未生成，$ el属性还不存在
    */
   created() {
-    this.getstaff();
+    
   },
   created() {},
   /**
@@ -120,7 +149,9 @@ export default {
    * el 被新创建的 vm.$ el 替换，并挂载到实例上去之后调用该钩子。
    * 如果 root 实例挂载了一个文档内元素，当 mounted 被调用时 vm.$ el 也在文档内。
    */
-  mounted() {},
+  mounted() {
+    this.getstaff();
+  },
   /**
    * 数据更新时调用，发生在虚拟 DOM 重新渲染和打补丁之前。
    * 你可以在这个钩子中进一步地更改状态，这不会触发附加的重渲染过程。

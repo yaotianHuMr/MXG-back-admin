@@ -34,16 +34,14 @@ export function staffinfo(page,pageSize){
 //     })
 // }
 
-// // 删除会员接口
-// export function staffDel(form){
-//     return request({
-//         url:"/member/${form.id}",
-//         method:"DELETE",
-//         data:{
-//             form
-//         }
-//     })
-// }
+// 删除会员接口
+export function staffDel(data){
+    return request({
+        url:`staff/${data}`,
+        method:"DELETE",
+        data
+    })
+}
 
 // // 查询单条数据接口
 // export function staffSeaOne(form){
