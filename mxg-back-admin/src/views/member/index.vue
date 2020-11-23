@@ -1,9 +1,5 @@
 <template>
   <div class="mine">
-    <!-- 面包屑 -->
-    <div class="member_bread">
-      <p>会员管理</p>
-    </div>
 
     <!-- 搜索栏 -->
     <el-form :inline="true" class="demo-form-inline">

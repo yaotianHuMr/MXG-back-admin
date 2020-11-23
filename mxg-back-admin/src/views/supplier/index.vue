@@ -1,9 +1,5 @@
 <template>
   <div>
-    <!-- 面包屑 -->
-    <div class="supplier_bread">
-      <p>供应商管理</p>
-    </div>
 
     <!-- 搜索栏 -->
     <el-form :inline="true" :model="formInline" class="demo-form-inline">

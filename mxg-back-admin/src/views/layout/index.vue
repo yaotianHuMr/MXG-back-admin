@@ -54,6 +54,7 @@
           </el-menu>
         </el-aside>
         <el-main>
+           <applink v-if="$route.path != '/home'"></applink>
           <!-- 路由占位符 -->
           <router-view></router-view>
         </el-main>
@@ -64,13 +65,16 @@
 
 <script>
 import { logout } from '../../API/login'
+import applink from "../applink/applink"
 export default {
   // 组件名称
   name: "demo",
   // 组件参数 接收来自父组件的数据
   props: [],
   // 局部注册的组件
-  components: {},
+  components: {
+    applink
+  },
   // 组件状态值
   data() {
     return {

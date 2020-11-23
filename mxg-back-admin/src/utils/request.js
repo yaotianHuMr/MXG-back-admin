@@ -3,6 +3,33 @@
 //引入axios
 import axios from "axios";
 
+
+//引入loading的加载服务
+import { Loading } from "element-ui"
+
+
+//创建loading加载
+const loading = {
+  loadingService: null,
+  //开启loading加载
+  open() {
+      if (this.loadingService == null) {
+          this.loadingService = Loading.service({
+              target: ".el-main",
+              text: "拼命加载中......",
+              background: "rgba(0,0,0,0.5)"
+          })
+      }
+  },
+  //关闭loading加载
+  close() {
+      if(this.loadingService != null){
+          this.loadingService.close();
+      }
+      this.loadingService = null;
+  }
+};
+
 //通过axios实例配置请求的公共接口
 const request = axios.create({
   baseURL: process.env.VUE_APP_BASE_API,
@@ -14,10 +41,13 @@ const request = axios.create({
 request.interceptors.request.use(
   config => {
     // 在发送请求之前做些什么
+    loading.open();
     config.headers["token"] = sessionStorage.getItem("token");
     return config;
   },
   function(error) {
+    loading.close();
+    this.$message.error("请求失败")
     // 对请求错误做些什么
     return Promise.reject(error);
   }
@@ -27,10 +57,12 @@ request.interceptors.request.use(
 // 添加响应拦截器
 request.interceptors.response.use(
   response => {
+    loading.close();
     // 对响应数据做点什么
     return response;
   },
   function(error) {
+    loading.close();
     // 对响应错误做点什么
     return Promise.reject(error);
   }
