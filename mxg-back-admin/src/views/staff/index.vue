@@ -39,6 +39,7 @@
         </template>
       </el-table-column>
     </el-table>
+    staff
   </div>
 </template>
 
@@ -64,6 +65,7 @@ export default {
       page: 1,
       pageSize: 20,
     };
+    return {};
   },
   // 计算属性
   computed: {},
@@ -109,6 +111,7 @@ export default {
   created() {
     this.getstaff();
   },
+  created() {},
   /**
    * 在挂载开始之前被调用：相关的 render 函数首次被调用。
    */
@@ -148,6 +151,7 @@ export default {
 };
 </script> 
 
+
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <!--使用了scoped属性之后，父组件的style样式将不会渗透到子组件中，-->
 <!--然而子组件的根节点元素会同时被设置了scoped的父css样式和设置了scoped的子css样式影响，-->
@@ -169,3 +173,4 @@ th{
   height: 60px;
 }
 </style>
+
