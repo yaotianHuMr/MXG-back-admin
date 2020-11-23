@@ -8,19 +8,19 @@
     <!-- 搜索栏 -->
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
       <el-form-item>
-        <el-input v-model="formInline.user" placeholder="供应商名称"></el-input>
+        <el-input v-model="formInline.SUname" placeholder="供应商名称"></el-input>
       </el-form-item>
       <el-form-item>
         <el-input v-model="formInline.user" placeholder="联系人"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-input v-model="formInline.user" placeholder="联系电话"></el-input>
+        <el-input v-model="formInline.userMO" placeholder="联系电话"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">新增</el-button>
+        <el-button type="primary" @click="Supplier_add">新增</el-button>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" plain @click="onSubmit">重置</el-button>
@@ -35,7 +35,19 @@
       </el-table-column>
       <el-table-column prop="mobile" label="联系电话"> </el-table-column>
       <el-table-column prop="remark" label="备注"> </el-table-column>
-      <el-table-column label="操作"> </el-table-column>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button size="mini" type="warning" @click="EditAdd(scope.row)"
+            >修改</el-button
+          >
+          <el-button
+            size="mini"
+            type="danger"
+            @click="delSupplier(scope.row.id)"
+            >删除</el-button
+          >
+        </template>
+      </el-table-column>
     </el-table>
     <!-- 分页器 -->
     <div class="block">
@@ -50,11 +62,65 @@
       >
       </el-pagination>
     </div>
+    <!-- 添加 -->
+    <el-dialog title="添加供应商" :visible.sync="dialogFormVisible">
+      <el-form :model="form">
+        <el-form-item label="供应商名称" :label-width="formLabelWidth">
+          <el-input v-model="form.name" autocomplete="off"></el-input>
+        </el-form-item>
+
+        <el-form-item label="联系人" :label-width="formLabelWidth">
+          <el-input v-model="form.linkman" autocomplete="off"></el-input>
+        </el-form-item>
+
+        <el-form-item label="联系电话" :label-width="formLabelWidth">
+          <el-input v-model="form.mobile" autocomplete="off"></el-input>
+        </el-form-item>
+
+        <el-form-item label="备注" :label-width="formLabelWidth">
+          <el-input v-model="form.remark" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="AddUser">确 定</el-button>
+      </div>
+    </el-dialog>
+    <!-- 編輯 -->
+    <el-dialog title="編輯供应商" :visible.sync="edit">
+      <el-form :model="editFrom">
+        <el-form-item label="供应商名称" :label-width="formLabelWidth">
+          <el-input v-model="editFrom.name" autocomplete="off"></el-input>
+        </el-form-item>
+
+        <el-form-item label="联系人" :label-width="formLabelWidth">
+          <el-input v-model="editFrom.linkman" autocomplete="off"></el-input>
+        </el-form-item>
+
+        <el-form-item label="联系电话" :label-width="formLabelWidth">
+          <el-input v-model="editFrom.mobile" autocomplete="off"></el-input>
+        </el-form-item>
+
+        <el-form-item label="备注" :label-width="formLabelWidth">
+          <el-input v-model="editFrom.remark" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="edit = false">取 消</el-button>
+        <el-button type="primary" @click="AddEdit">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { info, getSupplier } from "../../API/supplier_api";
+import {
+  info,
+  removeSupplier,
+  addSupplier,
+  updataSupplier,
+  AddupdataSupplier,
+} from "../../API/supplier_api";
 export default {
   // 组件名称
   name: "demo",
@@ -64,21 +130,33 @@ export default {
   components: {},
   // 组件状态值
   data() {
-    return {};
+  
     return {
      
-      formInline: "",
       formInline: {
         user: "",
+        userMO:'',
+        SUname:'',
       },
 
       // 供应商表格
       tableData: [],
-      size: this.size,
+      size: 10,
       page: 1,
       // 分页
       total: 0,
-      pageChange:1
+      pageChange: 1,
+      dialogFormVisible: false,
+      form: {
+        linkman: "",
+        mobile: "",
+        name: "",
+        remark: "",
+      },
+      formLabelWidth: "90px",
+      edit: false,
+      editFrom: {},
+      id: 0,
     };
   },
   // 计算属性
@@ -92,16 +170,16 @@ export default {
       const res = await info(this.size, this.page);
       console.log(res);
       this.tableData = res.data.data.rows;
-      this.total = res.data.data.total
+      this.total = res.data.data.total;
     },
     // 分页器
     handleSizeChange(size) {
-      this.size = (size);
+      this.size = size;
       this.getSupplierList();
     },
     handleCurrentChange(page) {
       this.pageChange = page;
-      this.page = (page-1)*this.size;
+      this.page = (page - 1) * this.size;
       this.getSupplierList();
     },
     // getSupplierList(){
@@ -109,6 +187,81 @@ export default {
     //     this.tableData=response.data.data
     //   })
     // }
+
+    // this.getSupplierList()
+    // 删除
+    delSupplier(id) {
+      this.$confirm("此条信息将会删除, 是否继续?", "删除", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(async () => {
+          const res = await removeSupplier(id);
+          if (res.data.flag) {
+            this.$message({
+              type: "success",
+              message: "删除成功!",
+            });
+          }
+          console.log(res);
+          this.getSupplierList();
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
+    },
+    // 增加
+    Supplier_add() {
+      this.dialogFormVisible = true;
+    },
+    async AddUser() {
+      let data = await addSupplier(this.form);
+      if (data.data.code == 2000) {
+        this.dialogFormVisible = false;
+        this.form = {};
+        this.getSupplierList();
+        this.$message({
+          type: "success",
+          message: "添加成功!",
+        });
+      } else {
+        this.$message({
+          type: "info",
+          message: "添加失败",
+        });
+      }
+      console.log(data);
+    },
+    //修改
+    async EditAdd(res) {
+      this.edit = true;
+      let data = await updataSupplier(res.id);
+      this.id = res.id;
+      this.editFrom = data.data.data;
+      console.log(this.editFrom);
+    },
+    //確認修改
+    async AddEdit() {
+      let data = await AddupdataSupplier(this.id, this.editFrom);
+      if (data.data.code == 2000) {
+        this.edit = false;
+        this.getSupplierList();
+        this.$message({
+          type: "success",
+          message: "修改成功!",
+        });
+      } else {
+        this.$message({
+          type: "info",
+          message: "修改失敗",
+        });
+      }
+      console.log(data);
+    },
   },
   // 以下是生命周期钩子   注：没用到的钩子请自行删除
   /**
