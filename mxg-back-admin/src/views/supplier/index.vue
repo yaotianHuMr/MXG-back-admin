@@ -8,13 +8,13 @@
     <!-- 搜索栏 -->
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
       <el-form-item>
-        <el-input v-model="formInline.user" placeholder="供应商名称"></el-input>
+        <el-input v-model="formInline.SUname" placeholder="供应商名称"></el-input>
       </el-form-item>
       <el-form-item>
         <el-input v-model="formInline.user" placeholder="联系人"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-input v-model="formInline.user" placeholder="联系电话"></el-input>
+        <el-input v-model="formInline.userMO" placeholder="联系电话"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -130,10 +130,13 @@ export default {
   components: {},
   // 组件状态值
   data() {
+  
     return {
-      formInline: "",
+     
       formInline: {
         user: "",
+        userMO:'',
+        SUname:'',
       },
 
       // 供应商表格
@@ -306,7 +309,7 @@ export default {
    * Vue 实例销毁后调用。调用后，Vue 实例指示的所有东西都会解绑定，
    * 所有的事件监听器会被移除，所有的子实例也会被销毁。
    */
-  destroyed() {},
+  destroyed() {}
 };
 </script> 
 
@@ -314,6 +317,7 @@ export default {
 <!--使用了scoped属性之后，父组件的style样式将不会渗透到子组件中，-->
 <!--然而子组件的根节点元素会同时被设置了scoped的父css样式和设置了scoped的子css样式影响，-->
 <!--这么设计的目的是父组件可以对子组件根元素进行布局。-->
+
 <style scoped>
 /* .supplier_box{
   width: 100%;
@@ -330,3 +334,4 @@ export default {
   margin-bottom: 15px;
 }
 </style>
+
