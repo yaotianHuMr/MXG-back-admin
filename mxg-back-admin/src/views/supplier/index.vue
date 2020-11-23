@@ -20,7 +20,7 @@
         <el-button type="primary" @click="onSubmit">查询</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">新增</el-button>
+        <el-button type="primary" @click="Supplier_add">新增</el-button>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" plain @click="onSubmit">重置</el-button>
@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import { info,removeSupplier } from "../../API/supplier_api";
+import { info,removeSupplier,addSupplier,updataSupplier } from "../../API/supplier_api";
 export default {
   // 组件名称
   name: "demo",
@@ -141,6 +141,10 @@ export default {
         });
   
     },
+    // 增加
+    Supplier_add(){
+      
+    }
     
   },
   // 以下是生命周期钩子   注：没用到的钩子请自行删除
