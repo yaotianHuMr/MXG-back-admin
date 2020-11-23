@@ -35,7 +35,14 @@
       </el-table-column>
       <el-table-column prop="mobile" label="联系电话"> </el-table-column>
       <el-table-column prop="remark" label="备注"> </el-table-column>
-      <el-table-column label="操作"> </el-table-column>
+      <el-table-column label="操作">
+        
+        <template slot-scope="scope">
+          <el-button size="mini" type="warning">修改</el-button>
+        <el-button size="mini" type="danger" @click="delSupplier(scope.row.id)">删除</el-button>
+        </template>
+        
+      </el-table-column>
     </el-table>
     <!-- 分页器 -->
     <div class="block">
@@ -54,7 +61,7 @@
 </template>
 
 <script>
-import { info, getSupplier } from "../../API/supplier_api";
+import { info,removeSupplier } from "../../API/supplier_api";
 export default {
   // 组件名称
   name: "demo",
@@ -65,7 +72,6 @@ export default {
   // 组件状态值
   data() {
     return {
-     
       formInline: "",
       formInline: {
         user: "",
@@ -73,11 +79,11 @@ export default {
 
       // 供应商表格
       tableData: [],
-      size: this.size,
+      size: 10,
       page: 1,
       // 分页
       total: 0,
-      pageChange:1
+      pageChange: 1,
     };
   },
   // 计算属性
@@ -91,16 +97,16 @@ export default {
       const res = await info(this.size, this.page);
       console.log(res);
       this.tableData = res.data.data.rows;
-      this.total = res.data.data.total
+      this.total = res.data.data.total;
     },
     // 分页器
     handleSizeChange(size) {
-      this.size = (size);
+      this.size = size;
       this.getSupplierList();
     },
     handleCurrentChange(page) {
       this.pageChange = page;
-      this.page = (page-1)*this.size;
+      this.page = (page - 1) * this.size;
       this.getSupplierList();
     },
     // getSupplierList(){
@@ -108,6 +114,34 @@ export default {
     //     this.tableData=response.data.data
     //   })
     // }
+    
+    // this.getSupplierList()
+    // 删除
+    delSupplier(id){
+       this.$confirm('此条信息将会删除, 是否继续?', '删除', {
+         
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(async() => {
+          const res = await removeSupplier(id);
+          if(res.data.flag){
+             this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+          }
+         console.log(res)
+           this.getSupplierList();
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
+  
+    },
+    
   },
   // 以下是生命周期钩子   注：没用到的钩子请自行删除
   /**
