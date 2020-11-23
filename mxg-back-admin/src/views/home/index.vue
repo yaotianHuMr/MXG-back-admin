@@ -1,6 +1,6 @@
 <template>
 <div>
-  index
+  欢迎进入梦学谷后台管理系统
 </div>
 </template>
 
