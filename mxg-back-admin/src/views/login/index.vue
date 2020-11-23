@@ -1,8 +1,4 @@
 <template>
-<<<<<<< HEAD
-  <div>
-    login
-=======
   <div class="login_wrap">
     <el-card class="box-card">
       <div slot="header" class="clearfix">
@@ -20,7 +16,6 @@
         </el-form-item>
       </el-form>
     </el-card>
->>>>>>> a93065c8946ab87b68927085416a44283193af79
   </div>
 </template>
 
@@ -38,9 +33,6 @@ export default {
   components: {},
   // 组件状态值
   data() {
-<<<<<<< HEAD
-    return {};
-=======
     return {
       form: {
         username: "admin",
@@ -54,15 +46,38 @@ export default {
         password: [{ required: true, message: "请输入密码", trigger: "blur" }]
       }
     };
->>>>>>> a93065c8946ab87b68927085416a44283193af79
   },
   // 计算属性
   computed: {},
   // 侦听器
   watch: {},
   // 组件方法
-<<<<<<< HEAD
-  methods: {},
+  methods: {
+    //节流
+    tologin: _.throttle(function(formName) {
+      this.onLogin(formName);
+    }, 5000),
+    //登录
+    onLogin(formName) {
+      this.$refs[formName].validate(async valid => {
+        //如果验证通过,则调用登录接口,进行登录,否在,给用户一个提示信息
+        if (valid) {
+          //获取登录接口的数据
+          const res = await login(this.form.username,this.form.password);
+          //如果登录成功,跳转到首页
+          console.log(res);
+          if(res.data.flag){
+            this.$router.push('/')
+            sessionStorage.setItem('token',res.data.code)
+          }else{
+            this.$message("登录失败")
+          }
+        } else {
+          return false;
+        }
+      });
+    }
+  },
   // 以下是生命周期钩子   注：没用到的钩子请自行删除
   /**
    * 在实例初始化之后，组件属性计算之前，如data属性等
@@ -110,43 +125,6 @@ export default {
   destroyed() {}
 };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<!--使用了scoped属性之后，父组件的style样式将不会渗透到子组件中，-->
-<!--然而子组件的根节点元素会同时被设置了scoped的父css样式和设置了scoped的子css样式影响，-->
-<!--这么设计的目的是父组件可以对子组件根元素进行布局。-->
-<style scoped></style>
-=======
-  methods: {
-    //节流
-    tologin: _.throttle(function(formName) {
-      this.onLogin(formName);
-    }, 5000),
-    //登录
-    onLogin(formName) {
-      this.$refs[formName].validate(async valid => {
-        //如果验证通过,则调用登录接口,进行登录,否在,给用户一个提示信息
-        if (valid) {
-          //获取登录接口的数据
-          const res = await login(this.form.username,this.form.password);
-          //如果登录成功,跳转到首页
-          console.log(res);
-          if(res.data.flag){
-            this.$router.push('/')
-            sessionStorage.setItem('token',res.data.code)
-            console.log(res.data.code)
-          }else{
-            this.$message("登录失败")
-          }
-        } else {
-          return false;
-        }
-      });
-    }
-  },
-  mounted() {}
-};
-</script> 
 <style lang="scss" scoped>
 h1 {
   font-size: 24px;
@@ -194,4 +172,3 @@ h1 {
   padding: 30px 50px 30px 30px;
 }
 </style>
->>>>>>> a93065c8946ab87b68927085416a44283193af79

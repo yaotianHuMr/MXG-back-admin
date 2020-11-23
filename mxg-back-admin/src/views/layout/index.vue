@@ -2,7 +2,7 @@
   <div class="once">
     <el-container>
       <el-header>Header</el-header>
-      <el-container>
+      <el-container>  
         <el-aside width="200px">
           <el-menu
             :default-active="$route.path"
@@ -135,14 +135,10 @@ export default {
 
 .el-main {
   background-color: #e9eef3;
-  color: #333;
-<<<<<<< HEAD
+  color: #333;  
   text-align: center;
   height: 100%;
-=======
-  /* text-align: center; */
-  /* line-height: 160px; */
->>>>>>> a93065c8946ab87b68927085416a44283193af79
+
 }
 
 .el-container {
