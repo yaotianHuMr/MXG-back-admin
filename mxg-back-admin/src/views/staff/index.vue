@@ -111,7 +111,7 @@ export default {
     // 搜索功能
     search(){
       this.staffList=res.copyList.filter(item=>{
-        return item 
+        return item.
       })
     },
 
