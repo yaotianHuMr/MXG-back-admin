@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="once">
     <el-container>
       <el-header>Header</el-header>
       <el-container>
@@ -106,9 +106,9 @@ export default {
    * Vue 实例销毁后调用。调用后，Vue 实例指示的所有东西都会解绑定，
    * 所有的事件监听器会被移除，所有的子实例也会被销毁。
    */
-  destroyed() {},
+  destroyed() {}
 };
-</script> 
+</script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <!--使用了scoped属性之后，父组件的style样式将不会渗透到子组件中，-->
@@ -122,7 +122,10 @@ export default {
   text-align: center;
   line-height: 60px;
 }
-
+.once{
+  width: 100%;
+  height: 100%;
+}
 .el-aside {
   background-color: #d3dce6;
   color: #333;
@@ -134,10 +137,10 @@ export default {
   background-color: #e9eef3;
   color: #333;
   text-align: center;
-  line-height: 160px;
+  height: 100%;
 }
 
 .el-container {
-  margin-bottom: 40px;
+  height: 100%;
 }
 </style>
