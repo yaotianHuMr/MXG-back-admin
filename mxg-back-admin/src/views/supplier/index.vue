@@ -31,16 +31,30 @@
     <el-table :data="tableData" height="250" border style="width: 100%">
       <el-table-column prop="id" label="序号" width="60"> </el-table-column>
       <el-table-column prop="name" label="供应商名称"> </el-table-column>
-      <el-table-column prop="linkman" label="联系人" width="120"> </el-table-column>
+      <el-table-column prop="linkman" label="联系人" width="120">
+      </el-table-column>
       <el-table-column prop="mobile" label="联系电话"> </el-table-column>
       <el-table-column prop="remark" label="备注"> </el-table-column>
-      <el-table-column  label="操作"> </el-table-column>
+      <el-table-column label="操作"> </el-table-column>
     </el-table>
+    <!-- 分页器 -->
+    <div class="block">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="pageChange"
+        :page-sizes="[10, 20]"
+        :page-size="size"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+      >
+      </el-pagination>
+    </div>
   </div>
 </template>
 
 <script>
-import { info,getSupplier} from "../../API/supplier_api"
+import { info, getSupplier } from "../../API/supplier_api";
 export default {
   // 组件名称
   name: "demo",
@@ -51,16 +65,19 @@ export default {
   // 组件状态值
   data() {
     return {
+     
       formInline: "",
       formInline: {
         user: "",
       },
 
       // 供应商表格
-      tableData:[],
-      size:10,
-      page:1
-
+      tableData: [],
+      size: this.size,
+      page: 1,
+      // 分页
+      total: 0,
+      pageChange:1
     };
   },
   // 计算属性
@@ -70,21 +87,27 @@ export default {
   // 组件方法
   methods: {
     onSubmit() {},
-    async getSupplierList(){
-      const res = await info(
-        this.size,
-        this.page,
-
-      )
-      console.log(res)
-      this.tableData = res.data.data.rows
-    }
+    async getSupplierList() {
+      const res = await info(this.size, this.page);
+      console.log(res);
+      this.tableData = res.data.data.rows;
+      this.total = res.data.data.total
+    },
+    // 分页器
+    handleSizeChange(size) {
+      this.size = (size);
+      this.getSupplierList();
+    },
+    handleCurrentChange(page) {
+      this.pageChange = page;
+      this.page = (page-1)*this.size;
+      this.getSupplierList();
+    },
     // getSupplierList(){
     //   supplier.getSupplier().then(response =>{
     //     this.tableData=response.data.data
     //   })
     // }
-
   },
   // 以下是生命周期钩子   注：没用到的钩子请自行删除
   /**
@@ -95,7 +118,7 @@ export default {
    * 组件实例创建完成，属性已绑定，但DOM还未生成，$ el属性还不存在
    */
   created() {
-    this.getSupplierList()
+    this.getSupplierList();
   },
   /**
    * 在挂载开始之前被调用：相关的 render 函数首次被调用。

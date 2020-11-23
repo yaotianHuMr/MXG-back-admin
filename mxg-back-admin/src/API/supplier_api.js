@@ -12,7 +12,7 @@ import request from "../utils/request"
 // }
 
 // 供应商表格数据
-export function info( size,page) {
+export function info(size,page) {
     return request({
         url: `/supplier/list/search/${page}/${size}`,
         method: 'POST',
