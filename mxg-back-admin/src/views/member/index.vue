@@ -83,8 +83,6 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="list.length">
     </el-pagination>
-  <div>
-    member
   </div>
 </template>
 
