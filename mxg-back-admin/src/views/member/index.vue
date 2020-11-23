@@ -83,6 +83,8 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="list.length">
     </el-pagination>
+  <div>
+    member
   </div>
 </template>
 
@@ -108,6 +110,7 @@ export default {
       page:1,
       pages:5
     };
+    return {};
   },
 
   methods: {
@@ -203,6 +206,7 @@ export default {
   created() {
     
   },
+  created() {},
   /**
    * 在挂载开始之前被调用：相关的 render 函数首次被调用。
    */
@@ -214,6 +218,7 @@ export default {
   mounted() {
     this.axio()
   },
+  mounted() {},
   /**
    * 数据更新时调用，发生在虚拟 DOM 重新渲染和打补丁之前。
    * 你可以在这个钩子中进一步地更改状态，这不会触发附加的重渲染过程。
@@ -243,6 +248,9 @@ export default {
   destroyed() {},
 };
 </script> 
+  destroyed() {}
+};
+</script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <!--使用了scoped属性之后，父组件的style样式将不会渗透到子组件中，-->
@@ -260,3 +268,4 @@ export default {
   margin-bottom: 15px;
 }
 </style>
+<style scoped></style>
