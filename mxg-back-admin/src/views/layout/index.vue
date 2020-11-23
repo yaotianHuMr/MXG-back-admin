@@ -2,7 +2,7 @@
   <div>
     <el-container>
       <el-header>Header</el-header>
-      <el-container>
+      <el-container>  
         <el-aside width="200px">
           <el-menu
             :default-active="$route.path"
