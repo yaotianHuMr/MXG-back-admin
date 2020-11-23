@@ -1,13 +1,8 @@
 <template>
-<<<<<<< HEAD
-  <div>
-    index
-  </div>
-=======
 <div>
   欢迎进入梦学谷后台管理系统
 </div>
->>>>>>> a93065c8946ab87b68927085416a44283193af79
+
 </template>
 
 <script>

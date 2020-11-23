@@ -84,7 +84,7 @@ import {
   editGoods,
   AddeditGoods,
   searchGoods
-} from "../../api/goods/goods";
+} from "../../API/goods/goods";
 export default {
   // 组件名称
   name: "demo",
