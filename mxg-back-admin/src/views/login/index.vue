@@ -68,7 +68,7 @@ export default {
           console.log(res);
           if(res.data.flag){
             this.$router.push('/')
-            sessionStorage.setItem('token',res.data.code)
+            sessionStorage.setItem('token',res.data.data.token)
           }else{
             this.$message("登录失败")
           }
