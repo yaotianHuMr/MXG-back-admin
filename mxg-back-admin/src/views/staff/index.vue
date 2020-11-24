@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 员工页面 -->
-    <div class="top">员工管理</div>
+
     <el-form :inline="true" :model="search" class="demo-form-inline">
       <el-form-item>
         <el-input v-model="search.model" placeholder="账号"></el-input>
@@ -23,28 +23,43 @@
     <el-table :data="staffList" border style="width: 100%">
       <el-table-column fixed prop="id" label="序号" width="150">
       </el-table-column>
-      <el-table-column prop="username" label="账号" width="150"> </el-table-column>
-      <el-table-column prop="name" label="姓名" width="120">
+      <el-table-column prop="username" label="账号" width="150">
       </el-table-column>
+      <el-table-column prop="name" label="姓名" width="120"> </el-table-column>
       <el-table-column prop="age" label="年龄" width="120"> </el-table-column>
       <el-table-column prop="mobile" label="电话" width="200">
       </el-table-column>
-      <el-table-column prop="salary" label="薪酬" width="150"> </el-table-column>
+      <el-table-column prop="salary" label="薪酬" width="150">
+      </el-table-column>
       <el-table-column prop="entryDate" label="入职时间" width="180">
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="200">
         <template slot-scope="scope">
-          <el-button @click="staffDel(scope.row)" type="text" size="small">编辑</el-button>
-          <el-button type="text" size="small" @click="shan(scope.row.id)">删除</el-button>
+          <el-button @click="staffDel(scope.row)" type="text" size="small"
+            >编辑</el-button
+          >
+          <el-button type="text" size="small" @click="shan(scope.row.id)"
+            >删除</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
-    staff
+
+    <!-- 分页器 -->
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage4"
+      :page-sizes="[3, 5, 8, 10]"
+      :page-size="100"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total"
+    ></el-pagination>
   </div>
 </template>
 
 <script>
-import { staffinfo,staffDel } from "../../API/staff";
+import { staffinfo, staffDel } from "../../API/staff";
 export default {
   // 组件名称
   name: "demo",
@@ -56,7 +71,7 @@ export default {
   data() {
     return {
       staffList: [],
-      copyList:[],
+      copyList: [],
       search: {
         name: "",
         username: "",
@@ -65,6 +80,8 @@ export default {
       list: [],
       page: 1,
       pageSize: 20,
+      currentPage4: 0,
+      total:0,
     };
     return {};
   },
@@ -75,63 +92,58 @@ export default {
   // 组件方法
   methods: {
     //删除
-    shan(id){
+    shan(id) {
       // console.log(id);
-      staffDel(id).then(res=>{
-        if(res.data.code===2000){
-          this.$message.success('删除成功')
-          this.staffList.filter(item=>{
-            if(item.id===id){
-              this.staffList.splice(item,1)
+      staffDel(id).then((res) => {
+        if (res.data.code === 2000) {
+          this.$message.success("删除成功");
+          this.staffList.filter((item) => {
+            if (item.id === id) {
+              this.staffList.splice(item, 1);
             }
-          })
-        }else{
-          this.$message.success('删除失败')
+          });
+        } else {
+          this.$message.success("删除失败");
         }
-      })
+      });
     },
-      // this.staffList.filter(item=>{
-      //   if(item.id===id){
-      //     this.staffList.splice(item,1)
-      //   }
-      // })
+    // this.staffList.filter(item=>{
+    //   if(item.id===id){
+    //     this.staffList.splice(item,1)
+    //   }
+    // })
     // 获取渲染数据
     async getstaff() {
       const { data: res } = await staffinfo(this.page, this.pageSize);
       console.log(res);
       if (res.flag == true) {
         this.staffList = res.data.rows;
-        this.copyList=res.data.rows;
+        this.copyList = res.data.rows;
+        this.total = res.data.total
       }
-        console.log(staffList);
-
+    },
+    handleSizeChange(val) {
+      this.pageSize = val;
+      this.getstaff();
+    },
+    handleCurrentChange(val) {
+      this.page = val;
+      this.getstaff();
     },
     // 编辑方法
-    staffDel(){
-      alert("编辑")
+    staffDel() {
+      alert("编辑");
     },
     // 搜索功能
-    searchsta(){
-      this.staffList=this.copyList.filter(item=>{
+    searchsta() {
+      this.staffList = this.copyList.filter((item) => {
         return item.name.includes(this.search.username);
         console.log(copyList);
-      })
-        console.log(staffList);
-
+      });
+      console.log(staffList);
     },
 
-
-    // 删除方法
-
-    // return res = await staffinfo(
-    //   this.page,
-    //   this.pageSize,
-    //   this.search
-    // )
-
-    handleClick() {
-
-    },
+    handleClick() {},
     onSubmit() {},
   },
   // 以下是生命周期钩子   注：没用到的钩子请自行删除
@@ -142,9 +154,7 @@ export default {
   /**
    * 组件实例创建完成，属性已绑定，但DOM还未生成，$ el属性还不存在
    */
-  created() {
-    
-  },
+  created() {},
   created() {},
   /**
    * 在挂载开始之前被调用：相关的 render 函数首次被调用。
@@ -205,7 +215,7 @@ export default {
   height: 40px;
   line-height: 40px;
 }
-th{
+th {
   height: 60px;
 }
 </style>

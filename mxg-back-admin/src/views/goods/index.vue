@@ -105,7 +105,7 @@ export default {
       tableData: [],
       input: "",
       currentPage4: 0,
-      total: "",
+      total: 0,
       dialogFormVisible: false,
       form: {},
       formLabelWidth: "80px",
@@ -251,6 +251,7 @@ export default {
 }
 .left {
   text-align: left;
+  margin-top: 10px;
 }
 .el-table {
   margin-top: 20px;
