@@ -1,8 +1,31 @@
 <template>
-  <div class="once">
+  <div>
     <el-container>
-      <el-header>Header</el-header>
-      <el-container>  
+      <el-header>
+        <p class="home_p">
+          <img
+            class="img1"
+            src="http://mengxuegu.com:9999/img/logo.7156be27.png"
+            width="30px"
+            alt
+          />
+          <span>积云后台管理系统</span>
+        </p>
+        <el-menu
+          class="el-menu-demo"
+          mode="horizontal"
+          background-color="#545c64"
+          text-color="#fff"
+          active-text-color="#ffd04b"
+        >
+          <el-submenu index="2">
+            <template slot="title">admin</template>
+            <el-menu-item index="2-1">修改密码</el-menu-item>
+            <el-menu-item index="2-2" @click="logout">退出登录</el-menu-item>
+          </el-submenu>
+        </el-menu>
+      </el-header>
+      <el-container>
         <el-aside width="200px">
           <el-menu
             :default-active="$route.path"
@@ -36,6 +59,7 @@
           </el-menu>
         </el-aside>
         <el-main>
+          <applink v-if="$route.path != '/home'"></applink>
           <!-- 路由占位符 -->
           <router-view></router-view>
         </el-main>
@@ -45,103 +69,91 @@
 </template>
 
 <script>
+import { logout } from "../../API/login";
+import applink from "../applink/applink";
 export default {
   // 组件名称
   name: "demo",
   // 组件参数 接收来自父组件的数据
   props: [],
   // 局部注册的组件
-  components: {},
+  components: {
+    applink,
+  },
   // 组件状态值
   data() {
-    return {};
+    return {
+      // name:"",
+    };
   },
+  created() {},
   // 计算属性
   computed: {},
   // 侦听器
   watch: {},
   // 组件方法
-  methods: {},
-  // 以下是生命周期钩子   注：没用到的钩子请自行删除
-  /**
-   * 在实例初始化之后，组件属性计算之前，如data属性等
-   */
-  beforeCreate() {},
-  /**
-   * 组件实例创建完成，属性已绑定，但DOM还未生成，$ el属性还不存在
-   */
-  created() {},
-  /**
-   * 在挂载开始之前被调用：相关的 render 函数首次被调用。
-   */
-  beforeMount() {},
-  /**
-   * el 被新创建的 vm.$ el 替换，并挂载到实例上去之后调用该钩子。
-   * 如果 root 实例挂载了一个文档内元素，当 mounted 被调用时 vm.$ el 也在文档内。
-   */
-  mounted() {},
-  /**
-   * 数据更新时调用，发生在虚拟 DOM 重新渲染和打补丁之前。
-   * 你可以在这个钩子中进一步地更改状态，这不会触发附加的重渲染过程。
-   */
-  beforeUpdate() {},
-  /**
-   * 由于数据更改导致的虚拟 DOM 重新渲染和打补丁，在这之后会调用该钩子。
-   * 当这个钩子被调用时，组件 DOM 已经更新，所以你现在可以执行依赖于 DOM 的操作。
-   */
-  updated() {},
-  /**
-   * keep-alive 组件激活时调用。 仅针对keep-alive 组件有效
-   */
-  activated() {},
-  /**
-   * keep-alive 组件停用时调用。 仅针对keep-alive 组件有效
-   */
-  deactivated() {},
-  /**
-   * 实例销毁之前调用。在这一步，实例仍然完全可用。
-   */
-  beforeDestroy() {},
-  /**
-   * Vue 实例销毁后调用。调用后，Vue 实例指示的所有东西都会解绑定，
-   * 所有的事件监听器会被移除，所有的子实例也会被销毁。
-   */
-  destroyed() {}
+  methods: {
+    async logout() {
+      const res = await logout();
+      console.log(res);
+      if (res.status == 200) {
+        this.$message.success("退出成功");
+        this.$router.push("/login");
+      }
+    },
+  },
 };
-</script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<!--使用了scoped属性之后，父组件的style样式将不会渗透到子组件中，-->
-<!--然而子组件的根节点元素会同时被设置了scoped的父css样式和设置了scoped的子css样式影响，-->
-<!--这么设计的目的是父组件可以对子组件根元素进行布局。-->
-<style scoped>
+</script> 
+<style lang="scss" scoped>
 .el-header,
 .el-footer {
-  background-color: #b3c0d1;
-  color: #333;
-  text-align: center;
+  background-color: #2d3a4b;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  // text-align: center;
   line-height: 60px;
+  > .home_p {
+    display: flex;
+    align-items: center;
+    > .img1 {
+      margin-right: 12px;
+    }
+  }
 }
-.once{
-  width: 100%;
-  height: 100%;
-}
+
 .el-aside {
-  background-color: #d3dce6;
+  background-color: #545c64;
   color: #333;
   text-align: center;
-  line-height: 200px;
+  height: 100%;
+  position: absolute;
+  top: 60px;
+  left: 0px;
+  bottom: 0;
 }
 
 .el-main {
   background-color: #e9eef3;
-  color: #333;  
-  text-align: center;
+  color: #333;
+  position: absolute;
+  top: 60px;
+  left: 200px;
+  right: 0;
+  bottom: 0;
   height: 100%;
-
 }
 
-.el-container {
+body>.el-container {
+  position: relative;
+  margin-bottom: 40px;
   height: 100%;
+}
+> .el-dropdown-link {
+  color: #fff;
+}
+.el-icon-arrow-down {
+  color: #fff;
 }
 </style>

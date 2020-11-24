@@ -21,9 +21,12 @@ export function login(username, password){
 // }
 
 //退出登录接口
-export function logOut(){
+export function logout(token){
     return request({
         url : "/user/logout",
-        method : "POST"
+        method : "POST",
+        data:{
+            token,
+        }
     })
 }
