@@ -10,7 +10,7 @@
         <el-input v-model="search.user" placeholder="姓名"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="search">查询</el-button>
+        <el-button type="primary" @click="searchsta">查询</el-button>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">新增</el-button>
@@ -103,16 +103,21 @@ export default {
         this.staffList = res.data.rows;
         this.copyList=res.data.rows;
       }
+        console.log(staffList);
+
     },
     // 编辑方法
     staffDel(){
       alert("编辑")
     },
     // 搜索功能
-    search(){
-      this.staffList=res.copyList.filter(item=>{
-        return item.
+    searchsta(){
+      this.staffList=this.copyList.filter(item=>{
+        return item.name.includes(this.search.username);
+        console.log(copyList);
       })
+        console.log(staffList);
+
     },
 
 
